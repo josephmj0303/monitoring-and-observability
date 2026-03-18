@@ -25,31 +25,7 @@ Designed for:
 
 ## 🏗️ Architecture
 
-```
-                +----------------------+
-                |      Grafana        |
-                |   Dashboards UI     |
-                +----------+----------+
-                           |
-        +------------------+------------------+
-        |                                     |
-+-------v--------+                  +----------v--------+
-|  Prometheus    |                  |       Loki        |
-| Metrics Engine |                  |   Log Storage     |
-+-------+--------+                  +----------+--------+
-        |                                      |
-        |                                      |
-+-------v--------+                 +-----------v--------+
-| Node Exporter  |                 |     Promtail       |
-| System Metrics |                 | Log Collector      |
-+----------------+                 +--------------------+
-
-        +------------------------+
-        |       cAdvisor         |
-        | Container Metrics      |
-        +------------------------+
-```
-
+![Monitoring_architecture](architecture/monitoring-architecture.png) 
 ---
 
 ## ⚙️ Tech Stack
