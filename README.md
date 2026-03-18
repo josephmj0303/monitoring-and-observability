@@ -147,17 +147,6 @@ Simulates traffic to visualize metrics and logs in real time.
 
 ---
 
-## 📂 Project Structure
-
-```
-docker/          → Configurations for monitoring stack  
-exporters/       → Metrics exporters  
-scripts/         → Automation scripts  
-docs/            → Documentation  
-```
-
----
-
 ## 📂 Repo Structure
 
 ```
@@ -221,21 +210,7 @@ monitoring-and-observability/
 
 ---
 
-## 📜 License
-
-This project is licensed under the MIT License.
-
----
-
 ## 👨‍💻 Author
 
 Portfolio Project
 DevOps Engineer | Cloud | Observability
-
----
-
-## ⭐ If you like this project
-
-Give it a star ⭐ on GitHub!
-
-[1]: https://github.com/posesco/miniblog?utm_source=chatgpt.com "posesco/code-monitoring-observability-blog"
