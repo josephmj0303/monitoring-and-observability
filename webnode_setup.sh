@@ -97,10 +97,10 @@ sudo apt install -y python3 python3-venv
 # Clone the project repository
 mkdir -p /tmp/project
 cd /tmp/project
-echo "Cloning vprofile-project repository..."
-git clone https://github.com/hkhcoder/vprofile-project.git
-cd vprofile-project/
-git checkout monitoring
+echo "Cloning monitoring-and-observability repository..."
+git clone https://github.com/josephmj0303/monitoring-and-observability.git
+cd monitoring-and-observability/
+git checkout main
 
 # Move titan to /opt and set up virtual environment
 mkdir -p /opt/titan
