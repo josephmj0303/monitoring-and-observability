@@ -1,4 +1,14 @@
 # 🚀 Monitoring & Observability Platform (VM-Based)
+![Platform](https://img.shields.io/badge/Platform-VM--Based-blue)
+![Observability](https://img.shields.io/badge/Observability-Prometheus%20%7C%20Grafana%20%7C%20Loki-orange)
+![Logs](https://img.shields.io/badge/Logs-Loki-yellow)
+![Metrics](https://img.shields.io/badge/Metrics-Prometheus-red)
+![Visualization](https://img.shields.io/badge/Dashboards-Grafana-F46800)
+![Collector](https://img.shields.io/badge/Agent-Grafana%20Alloy-4CAF50)
+![Language](https://img.shields.io/badge/App-Python%20Flask-green)
+![Infra](https://img.shields.io/badge/Infra-AWS%20EC2-232F3E)
+![Alerts](https://img.shields.io/badge/Alerts-Slack-blueviolet)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
 Production-ready **Monitoring & Observability Stack on EC2** using Prometheus, Grafana, Loki, and Grafana Alloy.
 
@@ -214,16 +224,67 @@ This helps visualize:
 ```
 monitoring-and-observability/
 │
+├── app/                            # Flask application
+│   └── titan
+│
 ├── architecture/
 │   ├── monitoring-architecture.png
 │   └── port-numbers.png
 │
-├── titan/                    # Flask application
-├── scripts/                  # Load generators
-├── webnode-setup.sh          # Full node setup
+├── docs/ 
+│   ├── alerting.md
+│   ├── architecture.md
+│   ├── setup-guide.md
+│   └── troubleshooting.md
+│
+├── observability/
+│   ├── alloy
+│   │   ├── alloy-defaults
+│   │   └── config-alloy
+│   ├── grafana
+│   │   └── grafana-setup.sh
+│   ├── loki
+│   │   └── lokisetup.sh
+│   ├── prometheus
+│   │   └── prometheus-setup.sh
+│   └── promtail
+│       └── promtail-config.yml
+│
+├── scripts/
+│   ├── generate_multi_logs.sh
+│   ├── load.sh
+│   ├── webnode_setup.sh
+│   ├── WebsiteTest-main.sh
+│   └── WebsiteTest-payment.sh
+│
+├── screenshots/
+│   ├── alloy-dashboard.png
+│   ├── grafana-dashboard-app.png
+│   ├── grafana-dashboard-system.png
+│   ├── prometheus-query.png
+│   └── prometheus-targets.png
+│       
 ├── README.md
 └── LICENSE
 ```
+---
+
+## 📸 Screenshots
+
+Alloy-Dashboard
+![alloy-dashboard](screenshots/alloy-dashboard.png)
+
+Grafana-app-Dashboard
+![Grafana-app-Dashboard](screenshots/grafana-dashboard-app.png)
+
+Grafana-system-Dashboard
+![Grafana-system-Dashboard](screenshots/grafana-dashboard-system.png)
+
+Prometheus-Query
+![Prometheus-Query](screenshots/prometheus-query.png)
+
+Prometheus-Targets
+![Prometheus-Targets](screenshots/prometheus-targets.png)
 
 ---
 
