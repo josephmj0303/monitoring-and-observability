@@ -1,50 +1,95 @@
-# 🚀 Monitoring & Observability Platform
+# 🚀 Monitoring & Observability Platform (VM-Based)
 
-Production-ready **Monitoring and Observability Stack** using Prometheus, Grafana, Loki, and exporters.
-This project demonstrates how to build a **complete DevOps observability pipeline** for infrastructure and applications.
+Production-ready **Monitoring & Observability Stack on EC2** using Prometheus, Grafana, Loki, and Grafana Alloy.
+
+This project demonstrates **real-world observability**, using:
+
+* VM-based deployment
+* Systemd services
+* Centralized logging & metrics pipeline
 
 ---
 
 ## 📌 Project Overview
 
-This repository provides a **centralized monitoring solution** that enables:
+This platform provides **end-to-end observability** for a Python Flask application running on a Linux server.
 
-* 📊 Metrics collection (Prometheus)
-* 📈 Visualization dashboards (Grafana)
-* 📜 Log aggregation (Loki + Promtail)
-* ⚙️ System & container monitoring (Node Exporter, cAdvisor)
-* 🚨 Alerting and incident visibility
+### 🔍 Key Capabilities
 
-Designed for:
-
-* DevOps Engineers
-* SREs
-* Cloud Engineers
+* 📊 Metrics collection via **Node Exporter & Alloy**
+* 📈 Visualization using **Grafana**
+* 📜 Centralized logging with **Loki**
+* ⚙️ Python Flask app monitoring
+* 🚨 Alerting with **Prometheus + Slack**
+* 🔄 Load simulation for real-time insights
 
 ---
 
 ## 🏗️ Architecture
 
-![Monitoring_architecture](architecture/monitoring-architecture.png) 
+### 📊 Observability Flow
+
+![Architecture](architecture/monitoring-architecture.png)
+
+### 🌐 Network & Ports
+
+![Ports](architecture/port-numbers.png)
+
 ---
 
 ## ⚙️ Tech Stack
 
-* **Prometheus** – Metrics scraping & alerting
-* **Grafana** – Visualization & dashboards
-* **Loki** – Log aggregation system
-* **Promtail** – Log collector agent
-* **Node Exporter** – Host-level metrics
-* **cAdvisor** – Container metrics
-* **Docker Compose** – Orchestration
-
-Modern observability stacks combine metrics, logs, and visualization for full system visibility ([GitHub][1])
+| Component     | Purpose                      |
+| ------------- | ---------------------------- |
+| Prometheus    | Metrics storage & alerting   |
+| Grafana       | Visualization dashboards     |
+| Loki          | Log aggregation              |
+| Grafana Alloy | Metrics + Logs collector     |
+| Node Exporter | System metrics               |
+| Python Flask  | Application under monitoring |
+| Slack         | Alert notifications          |
+| Systemd       | Service management           |
 
 ---
 
-## 🚀 Getting Started
+## 🖥️ Infrastructure Setup
 
-### 1️⃣ Clone the Repository
+### 🧱 EC2 Instances
+
+| Instance       | Role                              |
+| -------------- | --------------------------------- |
+| App EC2        | Flask app + Alloy + Node Exporter |
+| Prometheus EC2 | Metrics storage                   |
+| Grafana EC2    | Dashboards                        |
+| Loki EC2       | Log aggregation                   |
+
+---
+
+## 🔁 Data Flow
+
+1. **Node Exporter** → System metrics
+2. **Flask App** → `/metrics` endpoint
+3. **Alloy Agent**
+
+   * Scrapes metrics
+   * Pushes to Prometheus (remote_write)
+   * Collects logs → pushes to Loki
+4. **Prometheus**
+
+   * Stores metrics
+   * Sends alerts
+5. **Grafana**
+
+   * Queries Prometheus & Loki
+6. **Slack**
+
+   * Receives alerts from Alertmanager
+
+---
+
+## 🚀 Setup Instructions
+
+### 1️⃣ Clone Repository
 
 ```bash
 git clone https://github.com/josephmj0303/monitoring-and-observability.git
@@ -53,141 +98,158 @@ cd monitoring-and-observability
 
 ---
 
-### 2️⃣ Start the Stack
+### 2️⃣ Setup Application Node
+
+Run the full setup script:
 
 ```bash
-docker-compose up -d --build
+chmod +x webnode-setup.sh
+sudo ./webnode-setup.sh
+```
+
+This installs:
+
+* Node Exporter (port 9100)
+* Python Flask App (systemd service)
+* Grafana Alloy
+* Load generators
+* Logging pipeline
+
+---
+
+### 3️⃣ Configure Alloy
+
+Update endpoints in:
+
+```bash
+/etc/alloy/config.alloy
+```
+
+Replace:
+
+```
+PrometheusIP → Your Prometheus EC2 IP
+LokiIP       → Your Loki EC2 IP
 ```
 
 ---
 
-### 3️⃣ Access Services
+### 4️⃣ Access Services
 
-| Service    | URL                   |
-| ---------- | --------------------- |
-| Grafana    | http://localhost:3000 |
-| Prometheus | http://localhost:9090 |
-| Loki       | http://localhost:3100 |
-
----
-
-## 📊 Grafana Dashboards
-
-Pre-configured dashboards include:
-
-* System Metrics (CPU, Memory, Disk)
-* Container Monitoring
-* Application Metrics
-* Log Visualization (Loki)
+| Service       | Port  |
+| ------------- | ----- |
+| Flask App     | 5000  |
+| Node Exporter | 9100  |
+| Alloy UI      | 12345 |
+| Prometheus    | 9090  |
+| Grafana       | 3000  |
+| Loki          | 3100  |
 
 ---
 
-## 🚨 Alerting
+## 📊 Metrics Collection
 
-Prometheus alert rules can be configured for:
+* Node-level metrics via Node Exporter
+* App metrics via `/metrics` endpoint
+* Alloy handles scraping and forwarding
+
+---
+
+## 📜 Logging Pipeline
+
+* Logs stored at: `/var/log/titan/*.log`
+* Alloy collects logs
+* Pushes to Loki
+* Queried via Grafana (LogQL)
+
+---
+
+## 🚨 Alerting (Slack Integration)
+
+Prometheus Alertmanager is configured to send alerts to Slack.
+
+### Example Alerts
 
 * High CPU usage
-* Memory pressure
-* Container crashes
-* Service downtime
-
-Example alert rule:
-
-```yaml
-- alert: HighCPUUsage
-  expr: 100 - (avg by(instance)(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
-  for: 2m
-  labels:
-    severity: critical
-  annotations:
-    summary: "High CPU usage detected"
-```
+* App downtime
+* Memory spikes
 
 ---
 
-## 📜 Logging with Loki
+## 🧪 Load Testing
 
-* Centralized logging using **Loki**
-* Logs collected via **Promtail**
-* Query logs directly in Grafana using LogQL
-
----
-
-## 🧪 Load Testing (Optional)
+Simulate traffic:
 
 ```bash
-bash scripts/load-test.sh
+/usr/local/bin/load.sh
+/usr/local/bin/generate_multi_logs.sh
 ```
 
-Simulates traffic to visualize metrics and logs in real time.
+This helps visualize:
+
+* Metrics spikes
+* Log ingestion
+* Alert triggering
 
 ---
 
-## 📂 Repo Structure
+## 🔐 Security & Networking
+
+* UFW Firewall configured
+
+* Allowed ports:
+
+  * 22 (SSH)
+  * 5000 (App)
+  * 9100 (Node Exporter)
+  * 3100 (Loki)
+  * 12345 (Alloy)
+
+* Grafana access restricted to Admin/VPN
+
+---
+
+## 📂 Project Structure
 
 ```
 monitoring-and-observability/
 │
 ├── architecture/
-│   └── monitoring-architecture.png
+│   ├── monitoring-architecture.png
+│   └── port-numbers.png
 │
-├── docker/
-│   ├── prometheus/
-│   │   └── prometheus.yml
-│   │
-│   ├── grafana/
-│   │   ├── dashboards/
-│   │   └── datasources/
-│   │
-│   ├── loki/
-│   │   └── loki-config.yaml
-│   │
-│   └── promtail/
-│       └── promtail-config.yaml
-│
-├── exporters/
-│   ├── node-exporter/
-│   ├── cadvisor/
-│   └── app-metrics/
-│
-├── scripts/
-│   ├── setup.sh
-│   ├── cleanup.sh
-│   └── load-test.sh
-│
-├── docs/
-│   ├── setup-guide.md
-│   ├── dashboards.md
-│   ├── alerting.md
-│   └── troubleshooting.md
-│
-├── docker-compose.yml
-├── .env
+├── titan/                    # Flask application
+├── scripts/                  # Load generators
+├── webnode-setup.sh          # Full node setup
 ├── README.md
 └── LICENSE
 ```
 
 ---
-## 🔐 Security Best Practices
 
-* Use `.env` for credentials
-* Enable authentication in Grafana
-* Restrict Prometheus endpoints
-* Use reverse proxy (NGINX) for production
+## 📈 Key Highlights 
+
+* Built **VM-based observability stack**
+* Implemented **Grafana Alloy for unified pipeline**
+* Configured **remote_write metrics architecture**
+* Designed **centralized logging system**
+* Integrated **Slack alerting**
+* Simulated real-world traffic for monitoring validation
 
 ---
 
-## 📈 Future Improvements
+## 🔮 Future Enhancements
 
-* Kubernetes deployment (Helm charts)
-* Alertmanager integration
-* Distributed tracing (Jaeger / Tempo)
-* CI/CD integration
+* TLS/HTTPS setup
+* Grafana authentication hardening
+* Multi-node scaling
+* Kubernetes migration (optional)
+* Tempo (distributed tracing)
 
 ---
 
 ## 👨‍💻 Author
 
-Portfolio Project
+DevOps Portfolio Project
 
 DevOps Engineer | Cloud | Observability
