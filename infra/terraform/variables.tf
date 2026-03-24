@@ -13,5 +13,5 @@ variable "key_name" {
 
 variable "ami_id" {
   description = "Ubuntu 24 AMI"
-  default     = "ami-02dfbd4ff395f2a1b" 
+  default     = "ami-02dfbd4ff395f2a1b"
 }

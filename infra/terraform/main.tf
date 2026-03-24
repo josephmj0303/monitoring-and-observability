@@ -52,9 +52,9 @@ resource "aws_security_group" "prometheus_sg" {
   }
 
   ingress {
-    from_port   = 9090
-    to_port     = 9090
-    protocol    = "tcp"
+    from_port       = 9090
+    to_port         = 9090
+    protocol        = "tcp"
     security_groups = [aws_security_group.grafana_sg.id]
   }
 
