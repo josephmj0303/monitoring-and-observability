@@ -52,8 +52,15 @@ mv prometheus promtool "${BIN_DIR}"
 # Check version
 prometheus --version
 
-# Move config file
-mv prometheus.yml "${CONFIG_DIR}"
+# Go back to repo location (IMPORTANT)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Copy custom Prometheus configuration
+echo "Copying custom Prometheus configuration..."
+
+cp prometheus.yml "${CONFIG_DIR}/prometheus.yml"
+cp alerts.rules.yml "${CONFIG_DIR}/alerts.rules.yml"
 
 # Create systemd service file
 cat > "${SERVICE_FILE}" << EOF
