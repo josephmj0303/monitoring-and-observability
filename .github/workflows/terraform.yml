@@ -46,7 +46,7 @@ jobs:
         run: terraform plan
         working-directory: infra/terraform
 
-      # Optional (enable later)
+      # (enable later to avoid aws resource creation on every git push)
       # - name: Terraform Apply
       #   run: terraform apply -auto-approve
       #   working-directory: infra/terraform
