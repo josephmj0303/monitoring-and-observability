@@ -224,22 +224,44 @@ This helps visualize:
 ```
 monitoring-and-observability/
 │
-├── app/                            # Flask application
-│   └── titan
-│
 ├── architecture/
 │   ├── monitoring-architecture.png
 │   └── port-numbers.png
 │
-├── docs/ 
-│   ├── alerting.md
-│   ├── architecture.md
-│   ├── setup-guide.md
-│   └── troubleshooting.md
+├── app/
+│   └── titan/
+│       ├── app.py
+│       ├── requirements.txt          
+│       ├── index.html
+│       ├── payment.html
+│       ├── images/
+│       ├── tooplate-titan-script.js
+│       ├── tooplate-titan-style.css
+│       └── ABOUT THIS TEMPLATE.txt
 │
-├── .github/
-│   └── workflows/
-│       └── terraform.yml
+├── observability/
+│   ├── alloy/
+│   │   ├── config.alloy              
+│   │   └── defaults.env              
+│   │
+│   ├── prometheus/
+│   │   └── prometheus-setup.sh
+│   │
+│   ├── grafana/
+│   │   └── grafana-setup.sh
+│   │
+│   ├── loki/
+│   │   └── loki-setup.sh            
+│   │
+│   └── promtail/
+│       └── promtail-config.yml
+│
+├── scripts/
+│   ├── webnode-setup.sh              
+│   ├── load.sh
+│   ├── generate_multi_logs.sh
+│   ├── website-test-main.sh          
+│   └── website-test-payment.sh       
 │
 ├── infra/
 │   └── terraform/
@@ -249,34 +271,24 @@ monitoring-and-observability/
 │       ├── provider.tf
 │       └── terraform.tfvars
 │
-├── observability/
-│   ├── alloy
-│   │   ├── alloy-defaults
-│   │   └── config-alloy
-│   ├── grafana
-│   │   └── grafana-setup.sh
-│   ├── loki
-│   │   └── loki-setup.sh
-│   └── prometheus
-│       ├── prometheus-setup.sh
-│       ├── prometheus.yml
-│       └── alert-rules.yml
+├── .github/
+│   └── workflows/
+│       └── terraform.yml
 │
-├── scripts/
-│   ├── generate_multi_logs.sh
-│   ├── load.sh
-│   ├── webnode_setup.sh
-│   ├── WebsiteTest-main.sh
-│   └── WebsiteTest-payment.sh
+├── docs/
+│   ├── setup-guide.md
+│   ├── architecture.md
+│   ├── alerting.md
+│   └── troubleshooting.md
 │
 ├── screenshots/
-│   ├── alloy-dashboard.png
-│   ├── grafana-dashboard-app.png
-│   ├── grafana-dashboard-system.png
-│   ├── prometheus-query.png
-│   ├── prometheus-targets.png
-│   └── slack-alerts.png
-│       
+│   ├── grafana-dashboard-app.png
+│   ├── grafana-dashboard-system.png
+│   ├── alloy-dashboard.png
+│   ├── prometheus-query.png
+│   └── prometheus-targets.png
+│
+├── .gitignore
 ├── README.md
 └── LICENSE
 ```
