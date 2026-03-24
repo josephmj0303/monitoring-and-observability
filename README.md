@@ -1,37 +1,19 @@
 # 🚀 Monitoring & Observability Platform (VM-Based)
+
 ![Platform](https://img.shields.io/badge/Platform-VM--Based-blue)
-![Observability](https://img.shields.io/badge/Observability-Prometheus%20%7C%20Grafana%20%7C%20Loki-orange)
-![Logs](https://img.shields.io/badge/Logs-Loki-yellow)
-![Metrics](https://img.shields.io/badge/Metrics-Prometheus-red)
-![Visualization](https://img.shields.io/badge/Dashboards-Grafana-F46800)
-![Collector](https://img.shields.io/badge/Agent-Grafana%20Alloy-4CAF50)
-![Language](https://img.shields.io/badge/App-Python%20Flask-green)
+![Observability](https://img.shields.io/badge/Stack-Prometheus%20%7C%20Grafana%20%7C%20Loki-orange)
+![Agent](https://img.shields.io/badge/Agent-Grafana%20Alloy-green)
+![App](https://img.shields.io/badge/App-Python%20Flask-lightgrey)
 ![Infra](https://img.shields.io/badge/Infra-AWS%20EC2-232F3E)
-![Alerts](https://img.shields.io/badge/Alerts-Slack-blueviolet)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
-
-Production-ready **Monitoring & Observability Stack on EC2** using Prometheus, Grafana, Loki, and Grafana Alloy.
-
-This project demonstrates **real-world observability**, using:
-
-* VM-based deployment
-* Systemd services
-* Centralized logging & metrics pipeline
+![Alerting](https://img.shields.io/badge/Alerting-Slack-blueviolet)
 
 ---
 
 ## 📌 Project Overview
 
-This platform provides **end-to-end observability** for a Python Flask application running on a Linux server.
+This project demonstrates a **production-style observability platform** deployed on AWS EC2 instances without using containers.
 
-### 🔍 Key Capabilities
-
-* 📊 Metrics collection via **Node Exporter & Alloy**
-* 📈 Visualization using **Grafana**
-* 📜 Centralized logging with **Loki**
-* ⚙️ Python Flask app monitoring
-* 🚨 Alerting with **Prometheus + Slack**
-* 🔄 Load simulation for real-time insights
+It implements **metrics, logs, visualization, and alerting** for a Python Flask application using modern tooling.
 
 ---
 
@@ -49,179 +31,166 @@ This platform provides **end-to-end observability** for a Python Flask applicati
 
 ## ⚙️ Tech Stack
 
-| Component     | Purpose                      |
-| ------------- | ---------------------------- |
-| Prometheus    | Metrics storage & alerting   |
-| Grafana       | Visualization dashboards     |
-| Loki          | Log aggregation              |
-| Grafana Alloy | Metrics + Logs collector     |
-| Node Exporter | System metrics               |
-| Python Flask  | Application under monitoring |
-| Slack         | Alert notifications          |
-| Systemd       | Service management           |
+| Layer         | Tool          |
+| ------------- | ------------- |
+| Metrics       | Prometheus    |
+| Logs          | Loki          |
+| Visualization | Grafana       |
+| Agent         | Grafana Alloy |
+| App           | Python Flask  |
+| Infra         | AWS EC2       |
+| Alerting      | Slack         |
 
 ---
 
-## 🖥️ Infrastructure Setup
+## 🖥️ Infrastructure
 
-### 🧱 EC2 Instances
+Deployed on **AWS (us-east-1)** using **t3.micro EC2 instances**:
 
-| Instance       | Role                              |
-| -------------- | --------------------------------- |
-| App EC2        | Flask app + Alloy + Node Exporter |
-| Prometheus EC2 | Metrics storage                   |
-| Grafana EC2    | Dashboards                        |
-| Loki EC2       | Log aggregation                   |
+| Instance   | Role                              |
+| ---------- | --------------------------------- |
+| Web Server | Flask app + Alloy + Node Exporter |
+| Prometheus | Metrics storage                   |
+| Grafana    | Dashboards                        |
+| Loki       | Log aggregation                   |
 
 ---
 
 ## 🔁 Data Flow
 
-1. **Node Exporter** → System metrics
-2. **Flask App** → `/metrics` endpoint
-3. **Alloy Agent**
+### Metrics
 
-   * Scrapes metrics
-   * Pushes to Prometheus (remote_write)
-   * Collects logs → pushes to Loki
-4. **Prometheus**
+* Node Exporter → system metrics
+* Flask app → `/metrics`
+* Alloy → remote_write → Prometheus
 
-   * Stores metrics
-   * Sends alerts
-5. **Grafana**
+### Logs
 
-   * Queries Prometheus & Loki
-6. **Slack**
-
-   * Receives alerts from Alertmanager
+* App logs → `/var/log/titan/*.log`
+* Alloy → Loki → Grafana
 
 ---
 
-## 🚀 Setup Instructions
+## 🏗️ Infrastructure as Code (Terraform)
 
-### 1️⃣ Clone Repository
+Provision infrastructure using Terraform:
 
 ```bash
-git clone https://github.com/josephmj0303/monitoring-and-observability.git
-cd monitoring-and-observability
+cd infra/terraform
+terraform init
+terraform apply
+```
+
+Creates:
+
+* EC2 instances
+* Security groups
+* Networking
+
+---
+
+## ⚙️ CI/CD (GitHub Actions)
+
+Pipeline:
+
+* Terraform init
+* Validate
+* Plan
+
+Location:
+
+```
+.github/workflows/terraform.yml
 ```
 
 ---
 
-### 2️⃣ Setup Application Node
+## 🚀 Deployment Steps
 
-Run the full setup script:
+### 1. Provision Infrastructure
 
 ```bash
-chmod +x webnode-setup.sh
-sudo ./webnode-setup.sh
+terraform apply
 ```
 
-This installs:
+### 2. Setup Servers
 
-* Node Exporter (port 9100)
-* Python Flask App (systemd service)
-* Grafana Alloy
-* Load generators
-* Logging pipeline
+Run on respective EC2 instances:
+
+```bash
+scripts/webnode-setup.sh
+observability/prometheus/prometheus-setup.sh
+observability/grafana/grafana-setup.sh
+observability/loki/loki-setup.sh
+```
 
 ---
 
-### 3️⃣ Configure Alloy
+### 3. Configure Alloy
 
-Update endpoints in:
+Edit:
 
-```bash
+```
 /etc/alloy/config.alloy
 ```
 
-Replace:
+Update:
 
-```
-PrometheusIP → Your Prometheus EC2 IP
-LokiIP       → Your Loki EC2 IP
-```
+* Prometheus IP
+* Loki IP
 
 ---
 
-### 4️⃣ Access Services
+### 4. Access Services
 
-| Service       | Port  |
-| ------------- | ----- |
-| Flask App     | 5000  |
-| Node Exporter | 9100  |
-| Alloy UI      | 12345 |
-| Prometheus    | 9090  |
-| Grafana       | 3000  |
-| Loki          | 3100  |
+| Service    | URL                         |
+| ---------- | --------------------------- |
+| Grafana    | http://<grafana-ip>:3000    |
+| Prometheus | http://<prometheus-ip>:9090 |
+| App        | http://<web-ip>:5000        |
 
 ---
 
-## 📊 Metrics Collection
-
-* Node-level metrics via Node Exporter
-* App metrics via `/metrics` endpoint
-* Alloy handles scraping and forwarding
-
----
-
-## 📜 Logging Pipeline
-
-* Logs stored at: `/var/log/titan/*.log`
-* Alloy collects logs
-* Pushes to Loki
-* Queried via Grafana (LogQL)
+## 📊 Dashboards
+App-Dashboard
+![App Dashboard](screenshots/grafana-dashboard-app.png)
+System-Dashboard
+![System Dashboard](screenshots/grafana-dashboard-system.png)
+Alloy-Dashboard
+![Alloy_Dashboard](screenshots/alloy-dashboard.png)
+Prometheus-Targets
+![Prometheus-Targets](screenshots/prometheus-targets.png)
 
 ---
 
-## 🚨 Alerting (Slack Integration)
+## 🚨 Alerting
 
-Prometheus Alertmanager is configured to send alerts to Slack.
+* Prometheus Alertmanager
+* Slack integration
 
-### Example Alerts
+Triggers:
 
-* High CPU usage
+* High CPU
 * App downtime
 * Memory spikes
+* Disk Usage
+  
+![Slack Alerts](screenshots/slack-alerts.png)
 
 ---
 
 ## 🧪 Load Testing
 
-Simulate traffic:
-
 ```bash
-/usr/local/bin/load.sh
-/usr/local/bin/generate_multi_logs.sh
+scripts/load.sh
+scripts/generate_multi_logs.sh
 ```
-
-This helps visualize:
-
-* Metrics spikes
-* Log ingestion
-* Alert triggering
-
----
-
-## 🔐 Security & Networking
-
-* UFW Firewall configured
-
-* Allowed ports:
-
-  * 22 (SSH)
-  * 5000 (App)
-  * 9100 (Node Exporter)
-  * 3100 (Loki)
-  * 12345 (Alloy)
-
-* Grafana access restricted to Admin/VPN
 
 ---
 
 ## 📂 Project Structure
 
-```
+```bash
 monitoring-and-observability/
 │
 ├── architecture/
@@ -242,20 +211,19 @@ monitoring-and-observability/
 ├── observability/
 │   ├── alloy/
 │   │   ├── config.alloy              
-│   │   └── defaults.env              
+│   │   └── defaults.env             
 │   │
 │   ├── prometheus/
+│   │   ├── alert-rules.yml
+│   │   ├── prometheus.yml
 │   │   └── prometheus-setup.sh
 │   │
 │   ├── grafana/
 │   │   └── grafana-setup.sh
 │   │
-│   ├── loki/
-│   │   └── loki-setup.sh            
-│   │
-│   └── promtail/
-│       └── promtail-config.yml
-│
+│   └── loki/
+│       └── loki-setup.sh           
+│   
 ├── scripts/
 │   ├── webnode-setup.sh              
 │   ├── load.sh
@@ -286,60 +254,44 @@ monitoring-and-observability/
 │   ├── grafana-dashboard-system.png
 │   ├── alloy-dashboard.png
 │   ├── prometheus-query.png
-│   └── prometheus-targets.png
+│   ├── prometheus-targets.png
+│   └── slack-alerts.png
 │
 ├── .gitignore
 ├── README.md
 └── LICENSE
 ```
----
-
-## 📸 Screenshots
-
-Alloy-Dashboard
-![alloy-dashboard](screenshots/alloy-dashboard.png)
-
-Grafana-app-Dashboard
-![Grafana-app-Dashboard](screenshots/grafana-dashboard-app.png)
-
-Grafana-system-Dashboard
-![Grafana-system-Dashboard](screenshots/grafana-dashboard-system.png)
-
-Prometheus-Query
-![Prometheus-Query](screenshots/prometheus-query.png)
-
-Prometheus-Targets
-![Prometheus-Targets](screenshots/prometheus-targets.png)
-
-Slack-Alerts
-![Slack-Alerts](screenshots/slack-alerts.png)
-
 
 ---
 
-## 📈 Key Highlights 
+## 🔥 Key Highlights
 
-* Built **VM-based observability stack**
-* Implemented **Grafana Alloy for unified pipeline**
-* Configured **remote_write metrics architecture**
-* Designed **centralized logging system**
-* Integrated **Slack alerting**
-* Simulated real-world traffic for monitoring validation
+* VM-based observability (no Docker)
+* Grafana Alloy unified pipeline
+* Remote-write metrics architecture
+* Centralized logging system
+* Slack alerting integration
+* Infrastructure as Code (Terraform)
+* CI/CD pipeline with GitHub Actions
 
 ---
 
-## 🔮 Future Enhancements
+## 📈 Future Improvements
 
-* TLS/HTTPS setup
-* Grafana authentication hardening
-* Multi-node scaling
-* Kubernetes migration (optional)
-* Tempo (distributed tracing)
+* Terraform remote backend (S3 + DynamoDB)
+* HTTPS (NGINX + SSL)
+* Kubernetes migration
+* Distributed tracing (Tempo)
 
 ---
 
 ## 👨‍💻 Author
 
-DevOps Portfolio Project
-
+**Joseph MJ**
 DevOps Engineer | Cloud | Observability
+
+---
+
+## ⭐ Support
+
+If you found this useful, give it a ⭐
