@@ -237,14 +237,18 @@ monitoring-and-observability/
 │   ├── setup-guide.md
 │   └── troubleshooting.md
 │
-    infra/
-    └── terraform/
-        ├── main.tf
-        ├── variables.tf
-        ├── outputs.tf
-        ├── provider.tf
-        └── terraform.tfvars
-
+├── .github/
+│   └── workflows/
+│       └── terraform.yml
+│
+├── infra/
+│   └── terraform/
+│       ├── main.tf
+│       ├── variables.tf
+│       ├── outputs.tf
+│       ├── provider.tf
+│       └── terraform.tfvars
+│
 ├── observability/
 │   ├── alloy
 │   │   ├── alloy-defaults
