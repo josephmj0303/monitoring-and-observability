@@ -244,11 +244,11 @@ monitoring-and-observability/
 │   ├── grafana
 │   │   └── grafana-setup.sh
 │   ├── loki
-│   │   └── lokisetup.sh
-│   ├── prometheus
-│   │   └── prometheus-setup.sh
-│   └── promtail
-│       └── promtail-config.yml
+│   │   └── loki-setup.sh
+│   └── prometheus
+│       ├── prometheus-setup.sh
+│       ├── prometheus.yml
+│       └── alert-rules.yml
 │
 ├── scripts/
 │   ├── generate_multi_logs.sh
@@ -262,7 +262,8 @@ monitoring-and-observability/
 │   ├── grafana-dashboard-app.png
 │   ├── grafana-dashboard-system.png
 │   ├── prometheus-query.png
-│   └── prometheus-targets.png
+│   ├── prometheus-targets.png
+│   └── slack-alerts.png
 │       
 ├── README.md
 └── LICENSE
@@ -285,6 +286,10 @@ Prometheus-Query
 
 Prometheus-Targets
 ![Prometheus-Targets](screenshots/prometheus-targets.png)
+
+Slack-Alerts
+![Slack-Alerts](screenshots/slack-alerts.png)
+
 
 ---
 
