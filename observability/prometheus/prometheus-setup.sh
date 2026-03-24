@@ -60,7 +60,7 @@ cd "$SCRIPT_DIR"
 echo "Copying custom Prometheus configuration..."
 
 cp prometheus.yml "${CONFIG_DIR}/prometheus.yml"
-cp alerts.rules.yml "${CONFIG_DIR}/alerts.rules.yml"
+cp alert-rules.yml "${CONFIG_DIR}/alert-rules.yml"
 
 # Create systemd service file
 cat > "${SERVICE_FILE}" << EOF
